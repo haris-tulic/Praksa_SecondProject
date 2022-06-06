@@ -45,7 +45,7 @@ namespace Praksa_SecondProject.Migrations
 
                     b.HasIndex("BandId");
 
-                    b.ToTable("Albums");
+                    b.ToTable("Albums", (string)null);
 
                     b.HasData(
                         new
@@ -106,7 +106,7 @@ namespace Praksa_SecondProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bands");
+                    b.ToTable("Bands", (string)null);
 
                     b.HasData(
                         new

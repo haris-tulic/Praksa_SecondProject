@@ -8,7 +8,7 @@ namespace Praksa_SecondProject.Services.Interfaces
     {
         Task<ServiceResponse<List<GetBandDto>>> GetBands();
         Task<ServiceResponse<List<GetBandDto>>> GetBandsByGenre(BandResourceParameters genre);
-
+        PageList<GetBandDto> GetBandsPerPage(BandResourceParameters parameters);
         Task<ServiceResponse<GetBandDto>> GetBandById(int id);
         Task<ServiceResponse<GetBandDto>> AddBand(AddBandDto newBand);
         Task<ServiceResponse<GetBandDto>> UpdateBand(UpdateBandDto newBand);

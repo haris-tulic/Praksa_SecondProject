@@ -8,6 +8,7 @@ namespace Praksa_SecondProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ResponseCache(CacheProfileName = "100secondsCacheProfile")]
     public class AlbumController : ControllerBase
     {
         private readonly IAlbumService _service;

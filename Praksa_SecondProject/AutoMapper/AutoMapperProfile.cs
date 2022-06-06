@@ -12,7 +12,7 @@ namespace Praksa_SecondProject.AutoMapper
             CreateMap<AddBandDto, Band>().ReverseMap();
             CreateMap<UpdateBandDto, Band>().ReverseMap();
 
-            CreateMap<GetAlbumDto, Album>().ReverseMap();
+            CreateMap<Album,GetAlbumDto>().ReverseMap();
             CreateMap<AddAlbumDto, Album>().ReverseMap();
             CreateMap<UpdateAlbumDto, Album>().ReverseMap();
 

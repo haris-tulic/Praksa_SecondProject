@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Praksa_SecondProject.Validate;
+using System.ComponentModel.DataAnnotations;
 
 namespace Praksa_SecondProject.DTO
 {
-    public class AddAlbumDto
+    [AlbumValidation]
+    public class AddAlbumDto/*:IValidatableObject*/
     {
        
         [Required]
@@ -13,5 +15,13 @@ namespace Praksa_SecondProject.DTO
         public string Description { get; set; }
         [Required]
         public int BandId { get; set; }
+
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (Title==Description)
+        //    {
+        //        yield return new ValidationResult("Title and Description can't be the same!");
+        //    }
+        //}
     }
 }

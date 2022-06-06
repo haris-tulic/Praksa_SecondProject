@@ -89,7 +89,7 @@ namespace Praksa_SecondProject.Services.Services
             var response=new ServiceResponse<GetBandDto>();
             try
             {
-                var entity = await _context.Bands.FirstOrDefaultAsync(x => x.Id == id);
+                var entity = await _context.Bands.Include(x=>x.Albums).FirstOrDefaultAsync(x => x.Id == id);
                 if (entity==null)
                 {
                     response.Success = false;
@@ -113,7 +113,7 @@ namespace Praksa_SecondProject.Services.Services
             var response=new ServiceResponse<List<GetBandDto>>();
             try
             {
-                var listEntity=await _context.Bands.ToListAsync();
+                var listEntity=await _context.Bands.Include(x=>x.Albums).ToListAsync();
                 if (listEntity==null)
                 {
                     response.Message = "Bands doesn't exists!";
@@ -140,7 +140,7 @@ namespace Praksa_SecondProject.Services.Services
             if (string.IsNullOrWhiteSpace(genre.Genre) && string.IsNullOrWhiteSpace(genre.SearchQuery))
                 return await GetBands();
 
-            var collection = _context.Bands.AsQueryable();
+            var collection = _context.Bands.Include(x=>x.Albums).AsQueryable();
             if (!string.IsNullOrWhiteSpace(genre.SearchQuery))
             {
                 genre.SearchQuery =genre.SearchQuery.Trim() ;
@@ -156,12 +156,31 @@ namespace Praksa_SecondProject.Services.Services
                 return response;
 
             }
-            var list = await collection.ToListAsync();
+            var list = await collection.Skip(genre.PageSize*(genre.PageNumber-1)).Take(genre.PageSize).ToListAsync();
             response.Data = _mapper.Map<List<GetBandDto>>(list);
             response.Success = true;
             return response;
             //searching
 
+        }
+
+        public PageList<GetBandDto> GetBandsPerPage(BandResourceParameters parameters)
+        {
+            var response = new ServiceResponse<List<Band>>();
+         
+
+            var collection = _context.Bands as IQueryable<GetBandDto>;
+            if (!string.IsNullOrWhiteSpace(parameters.SearchQuery))
+            {
+                parameters.SearchQuery = parameters.SearchQuery.Trim();
+                collection =  collection.Include(x=>x.Albums).Where(x => x.MainGenre.Contains(parameters.SearchQuery));
+            }
+            if (!string.IsNullOrWhiteSpace(parameters.Genre))
+            {
+                parameters.Genre = parameters.Genre.Trim();
+                collection=collection.Include(x=>x.Albums).Where(x => x.MainGenre == parameters.Genre);
+            }
+            return PageList<GetBandDto>.Create(collection, parameters.PageSize, parameters.PageNumber);
         }
 
         public async Task<ServiceResponse<GetBandDto>> UpdateBand(UpdateBandDto updateBand)

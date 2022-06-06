@@ -101,14 +101,14 @@ namespace Praksa_SecondProject.Services.Services
             var response=new ServiceResponse<List<GetAlbumDto>>();
             try
             {
-                var list = await _context.Albums.Include(x => x.Band).Where(x => x.BandId==bandId).ToListAsync();
+                var list = await _context.Albums.Where(x => x.BandId==bandId).ToListAsync();
                 if (list==null)
                 {
                     response.Success = false;
                     response.Message = "Albums doesn't exist!";
                     return response;
                 }
-                response.Data = _mapper.Map<List<GetAlbumDto>>(response);
+                response.Data = _mapper.Map<List<GetAlbumDto>>(list);
                 response.Success = true;
                 response.Message = "Albums succesfully found!";
             }
