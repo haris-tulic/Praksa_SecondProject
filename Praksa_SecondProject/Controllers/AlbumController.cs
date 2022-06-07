@@ -8,7 +8,7 @@ namespace Praksa_SecondProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ResponseCache(CacheProfileName = "100secondsCacheProfile")]
+    //[ResponseCache(CacheProfileName = "100secondsCacheProfile")]
     public class AlbumController : ControllerBase
     {
         private readonly IAlbumService _service;
@@ -19,7 +19,7 @@ namespace Praksa_SecondProject.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<ServiceResponse<List<GetAlbumDto>>>> Get(int bandId)
+        public async Task<ActionResult<ServiceResponse<List<GetAlbumDto>>>> Get(int? bandId)
         {
             var response=await _service.GetAlbums(bandId);
             if (!response.Success)
@@ -28,7 +28,7 @@ namespace Praksa_SecondProject.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("[action]/{id}")]
+        [HttpGet("[action]/{albumId}/{bandId}")]
         public async Task<ActionResult<ServiceResponse<GetAlbumDto>>> GetById(int albumId,int bandId)
         {
             var response = await _service.GetAlbum(bandId,albumId);

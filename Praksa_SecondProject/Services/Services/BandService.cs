@@ -140,17 +140,17 @@ namespace Praksa_SecondProject.Services.Services
             if (string.IsNullOrWhiteSpace(genre.Genre) && string.IsNullOrWhiteSpace(genre.SearchQuery))
                 return await GetBands();
 
-            var collection = _context.Bands.Include(x=>x.Albums).AsQueryable();
+            var collection = _context.Bands.AsQueryable();
             if (!string.IsNullOrWhiteSpace(genre.SearchQuery))
             {
                 genre.SearchQuery =genre.SearchQuery.Trim() ;
-                collection = collection.Where(x => x.MainGenre.Contains(genre.SearchQuery));
+                collection = collection.Include(x=>x.Albums).Where(x => x.MainGenre.Contains(genre.SearchQuery));
             }
             if (!string.IsNullOrWhiteSpace(genre.Genre))
             {
                 genre.Genre = genre.Genre.Trim();
 
-                var bands= await _context.Bands.Where(x => x.MainGenre == genre.Genre).ToListAsync();
+                var bands= await _context.Bands.Include(x => x.Albums).Where(x => x.MainGenre == genre.Genre).ToListAsync();
                 response.Data = _mapper.Map<List<GetBandDto>>(bands);
                 response.Success = true;
                 return response;

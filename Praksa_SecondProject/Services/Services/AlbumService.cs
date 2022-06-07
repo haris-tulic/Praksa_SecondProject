@@ -96,12 +96,20 @@ namespace Praksa_SecondProject.Services.Services
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetAlbumDto>>> GetAlbums(int bandId)
+        public async Task<ServiceResponse<List<GetAlbumDto>>> GetAlbums(int ?bandId)
         {
             var response=new ServiceResponse<List<GetAlbumDto>>();
             try
             {
-                var list = await _context.Albums.Where(x => x.BandId==bandId).ToListAsync();
+                var list = new List<Album>();
+                if (bandId.HasValue)
+                {
+                     list = await _context.Albums.Include(x=>x.Band).Where(x => x.BandId==bandId).ToListAsync();
+                }
+                else
+                {
+                    list = await _context.Albums.Include(x => x.Band).ToListAsync();
+                }
                 if (list==null)
                 {
                     response.Success = false;
